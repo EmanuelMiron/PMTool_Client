@@ -1,11 +1,12 @@
 import CssBaseLine from '@material-ui/core/CssBaseline';
+import Dashboard from './components/layout/Dashboard';
 
 const  App = () => {
   return (
-    <div className="App">
+    <>
       <CssBaseLine />
-      <h1>App Component</h1>
-    </div>
+      <Dashboard />
+    </>
   );
 }
 
