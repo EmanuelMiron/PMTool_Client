@@ -1,10 +1,6 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-
-const isAuthenticated = () => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return (user && user.accessToken) ? true : false;
-}
+import isAuthenticated from '../helpers/isAuthenticated';
 
 const ProtectedRoute = ({ component: Component, ...rest }) => (
 	<Route
