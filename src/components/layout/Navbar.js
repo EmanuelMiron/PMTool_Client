@@ -15,7 +15,8 @@ const useStyles = makeStyles((theme) => ({
 		flexGrow: 1,
 	},
 	button: {
-		marginRight: '0.5rem',
+        marginRight: '0.5rem',
+        textTransform: 'none',
 	},
 }));
 
@@ -48,7 +49,7 @@ const Navbar = () => {
 				{isAuthenticated() ? (
 					<>
 						<Button className={classes.button} color="primary" variant="contained">
-							{currentUser.user}
+							{currentUser.username}
 						</Button>
 						<Button style={{ color: 'white' }} onClick={logout}>Logout</Button>
 					</>
