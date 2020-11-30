@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 // Material UI Components
@@ -36,6 +36,28 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
 	const classes = useStyles();
 
+	const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+	const handleEmailChange = (event) => {
+		const newEmail = event.target.value;
+		setEmail(newEmail);
+	};
+
+	const handlePasswordChange = (event) => {
+		const newPassword = event.target.value;
+		setPassword(newPassword);
+	};
+
+	const handleLogin = (event) => {
+        event.preventDefault();
+        
+        // Send request to api/auth/login
+
+        // Set username and accessToken in localStorage
+        localStorage.setItem('user', JSON.stringify({username: 'User', accessToken: 'asdfgh'}));
+	};
+
 	return (
 		<Container component="main" maxWidth="xs">
 			<div className={classes.paper}>
@@ -45,7 +67,7 @@ const Login = () => {
 				<Typography component="h1" variant="h4">
 					Login
 				</Typography>
-				<form className={classes.form}>
+				<form className={classes.form} onSubmit={handleLogin}>
 					<TextField
 						variant="outlined"
 						margin="normal"
@@ -56,6 +78,8 @@ const Login = () => {
 						name="email"
 						autoComplete="email"
 						autoFocus
+						value={email}
+						onChange={handleEmailChange}
 					/>
 					<TextField
 						variant="outlined"
@@ -66,17 +90,19 @@ const Login = () => {
 						label="Password"
 						id="password"
 						type="password"
+						value={password}
+						onChange={handlePasswordChange}
 					/>
 					<Button type="submit" fullWidth variant="contained" color="secondary" className={classes.submit}>
 						Login
 					</Button>
-                    <Grid container>
-                        <Grid item xs>
-                            <Link href="/register" variant='body2'>
-                            {"Don't have an account? Register"}
-                            </Link>
-                        </Grid>
-                    </Grid>
+					<Grid container>
+						<Grid item xs>
+							<Link href="/register" variant="body2">
+								{"Don't have an account? Register"}
+							</Link>
+						</Grid>
+					</Grid>
 				</form>
 			</div>
 		</Container>
