@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 // Material UI Components
@@ -36,6 +36,50 @@ const useStyles = makeStyles((theme) => ({
 const Register = () => {
 	const classes = useStyles();
 
+	const [firstName, setFirstName] = useState('');
+	const [lastName, setLastName] = useState('');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const [confirmPassword, setConfirmPassword] = useState('');
+
+	const handleFirstNameChange = event => {
+		const newFirstName = event.target.value;
+		setFirstName(newFirstName);
+	}
+	
+	const handleLastNameChange = event => {
+		const newLastName = event.target.value;
+		setLastName(newLastName);
+	}
+
+	const handleEmailChange = event => {
+		const newEmail = event.target.value;
+		setEmail(newEmail);
+	}
+
+	const handlePasswordChange = event => {
+		const newPassword = event.target.value;
+		setPassword(newPassword);
+	}
+
+	const handleConfirmPasswordChange = event => {
+		const newConfirmPassword = event.target.value;
+		setConfirmPassword(newConfirmPassword);
+	}
+
+	const handleRegister = event => {
+		event.preventDefault();
+
+		// Send request to api/auth/register
+
+		// Reset form values
+		setFirstName('');
+		setLastName('');
+		setEmail('');
+		setPassword('');
+		setConfirmPassword('');
+	}
+
 	return (
 		<Container component="main" maxWidth="xs">
 			<div className={classes.paper}>
@@ -45,7 +89,7 @@ const Register = () => {
 				<Typography component="h1" variant="h4">
 					Register
 				</Typography>
-				<form className={classes.form}>
+				<form className={classes.form} onSubmit={handleRegister}>
 					<Grid container spacing={2}>
 						<Grid item xs={12} sm={6}>
 							<TextField
@@ -57,6 +101,8 @@ const Register = () => {
 								id="firstName"
 								label="First Name"
 								autoFocus
+								value={firstName}
+								onChange={handleFirstNameChange}
 							/>
 						</Grid>
 						<Grid item xs={12} sm={6}>
@@ -68,6 +114,8 @@ const Register = () => {
 								label="Last Name"
 								name="lastName"
 								autoComplete="lname"
+								value={lastName}
+								onChange={handleLastNameChange}
 							/>
 						</Grid>
 						<Grid item xs={12}>
@@ -79,6 +127,8 @@ const Register = () => {
 								label="Email Address"
 								name="email"
 								autoComplete="email"
+								value={email}
+								onChange={handleEmailChange}
 							/>
 						</Grid>
 						<Grid item xs={12}>
@@ -91,6 +141,8 @@ const Register = () => {
 								type="password"
 								id="password"
 								autoComplete="current-password"
+								value={password}
+								onChange={handlePasswordChange}
 							/>
 						</Grid>
 						<Grid item xs={12}>
@@ -102,19 +154,21 @@ const Register = () => {
 								label="Confirm Password"
 								type="password"
 								id="confirmPassword"
+								value={confirmPassword}
+								onChange={handleConfirmPasswordChange}
 							/>
 						</Grid>
 					</Grid>
 					<Button type="submit" fullWidth variant="contained" color="secondary" className={classes.submit}>
 						Register
 					</Button>
-                    <Grid container justify='flex-end'>
-                        <Grid item>
-                            <Link href="/login" variant='body2'>
-                                Already have an account? Login
-                            </Link>
-                        </Grid>
-                    </Grid>
+					<Grid container justify="flex-end">
+						<Grid item>
+							<Link href="/login" variant="body2">
+								Already have an account? Login
+							</Link>
+						</Grid>
+					</Grid>
 				</form>
 			</div>
 		</Container>
