@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { validateRegister } from '../helpers/validators';
 
 // Material UI Components
 import Container from '@material-ui/core/Container';
@@ -36,38 +37,74 @@ const useStyles = makeStyles((theme) => ({
 const Register = () => {
 	const classes = useStyles();
 
-	const [firstName, setFirstName] = useState('');
-	const [lastName, setLastName] = useState('');
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
-	const [confirmPassword, setConfirmPassword] = useState('');
+	const defaultFormState = { value: '', errorState: false, errorHelperText: '' };
 
-	const handleFirstNameChange = event => {
+	const [firstName, setFirstName] = useState(defaultFormState);
+	const [lastName, setLastName] = useState(defaultFormState);
+	const [email, setEmail] = useState(defaultFormState);
+	const [password, setPassword] = useState(defaultFormState);
+	const [confirmPassword, setConfirmPassword] = useState(defaultFormState);
+
+	const handleFirstNameChange = (event) => {
 		const newFirstName = event.target.value;
-		setFirstName(newFirstName);
-	}
-	
-	const handleLastNameChange = event => {
+		setFirstName({ ...firstName, value: newFirstName });
+	};
+
+	const handleLastNameChange = (event) => {
 		const newLastName = event.target.value;
-		setLastName(newLastName);
-	}
+		setLastName({ ...lastName, value: newLastName });
+	};
 
-	const handleEmailChange = event => {
+	const handleEmailChange = (event) => {
 		const newEmail = event.target.value;
-		setEmail(newEmail);
-	}
+		setEmail({ ...email, value: newEmail });
+	};
 
-	const handlePasswordChange = event => {
+	const handlePasswordChange = (event) => {
 		const newPassword = event.target.value;
-		setPassword(newPassword);
-	}
+		setPassword({ ...password, value: newPassword });
+	};
 
-	const handleConfirmPasswordChange = event => {
+	const handleConfirmPasswordChange = (event) => {
 		const newConfirmPassword = event.target.value;
-		setConfirmPassword(newConfirmPassword);
-	}
+		setConfirmPassword({ ...confirmPassword, value: newConfirmPassword });
+	};
 
-	const handleRegister = event => {
+	const validateEntry = (event) => {
+		const error = validateRegister(event, password.value);
+
+		switch (event.target.id) {
+			case 'firstName':
+				error.state
+					? setFirstName({ ...firstName, error: true, errorHelperText: error.message })
+					: setFirstName({ ...firstName, error: false, errorHelperText: '' });
+				break;
+			case 'lastName':
+				error.state
+					? setLastName({ ...lastName, error: true, errorHelperText: error.message })
+					: setLastName({ ...lastName, error: false, errorHelperText: '' });
+				break;
+			case 'email':
+				error.state
+					? setEmail({ ...email, error: true, errorHelperText: error.message })
+					: setEmail({ ...email, error: false, errorHelperText: '' });
+				break;
+			case 'password':
+				error.state
+					? setPassword({ ...password, error: true, errorHelperText: error.message })
+					: setPassword({ ...password, error: false, errorHelperText: '' });
+				break;
+			case 'confirmPassword':
+				error.state
+					? setConfirmPassword({ ...confirmPassword, error: true, errorHelperText: error.message })
+					: setConfirmPassword({ ...confirmPassword, error: false, errorHelperText: '' });
+				break;
+			default:
+				break;
+		}
+	};
+
+	const handleRegister = (event) => {
 		event.preventDefault();
 
 		// Send request to api/auth/register
@@ -78,7 +115,7 @@ const Register = () => {
 		setEmail('');
 		setPassword('');
 		setConfirmPassword('');
-	}
+	};
 
 	return (
 		<Container component="main" maxWidth="xs">
@@ -93,69 +130,79 @@ const Register = () => {
 					<Grid container spacing={2}>
 						<Grid item xs={12} sm={6}>
 							<TextField
+								error={firstName.error}
+								helperText={firstName.errorHelperText}
 								autoComplete="fname"
-								name="firstName"
 								variant="outlined"
 								required
 								fullWidth
 								id="firstName"
 								label="First Name"
 								autoFocus
-								value={firstName}
+								value={firstName.value}
 								onChange={handleFirstNameChange}
+								onBlur={validateEntry}
 							/>
 						</Grid>
 						<Grid item xs={12} sm={6}>
 							<TextField
+								error={lastName.error}
+								helperText={lastName.errorHelperText}
 								variant="outlined"
 								required
 								fullWidth
 								id="lastName"
 								label="Last Name"
-								name="lastName"
 								autoComplete="lname"
-								value={lastName}
+								value={lastName.value}
 								onChange={handleLastNameChange}
+								onBlur={validateEntry}
 							/>
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
+								error={email.error}
+								helperText={email.errorHelperText}
 								variant="outlined"
 								required
 								fullWidth
 								id="email"
 								label="Email Address"
-								name="email"
 								autoComplete="email"
-								value={email}
+								value={email.value}
 								onChange={handleEmailChange}
+								onBlur={validateEntry}
 							/>
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
+								error={password.error}
+								helperText={password.errorHelperText}
 								variant="outlined"
 								required
 								fullWidth
-								name="password"
 								label="Password"
 								type="password"
 								id="password"
 								autoComplete="current-password"
-								value={password}
+								value={password.value}
 								onChange={handlePasswordChange}
+								onBlur={validateEntry}
 							/>
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
+								error={confirmPassword.error}
+								helperText={confirmPassword.errorHelperText}
 								variant="outlined"
 								required
 								fullWidth
-								name="confirmPassword"
 								label="Confirm Password"
 								type="password"
 								id="confirmPassword"
-								value={confirmPassword}
+								value={confirmPassword.value}
 								onChange={handleConfirmPasswordChange}
+								onBlur={validateEntry}
 							/>
 						</Grid>
 					</Grid>
