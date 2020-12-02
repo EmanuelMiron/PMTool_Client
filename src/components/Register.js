@@ -76,28 +76,28 @@ const Register = () => {
 		switch (event.target.id) {
 			case 'firstName':
 				error.state
-					? setFirstName({ ...firstName, error: true, errorHelperText: error.message })
-					: setFirstName({ ...firstName, error: false, errorHelperText: '' });
+					? setFirstName({ ...firstName, errorState: true, errorHelperText: error.message })
+					: setFirstName({ ...firstName, errorState: false, errorHelperText: '' });
 				break;
 			case 'lastName':
 				error.state
-					? setLastName({ ...lastName, error: true, errorHelperText: error.message })
-					: setLastName({ ...lastName, error: false, errorHelperText: '' });
+					? setLastName({ ...lastName, errorState: true, errorHelperText: error.message })
+					: setLastName({ ...lastName, errorState: false, errorHelperText: '' });
 				break;
 			case 'email':
 				error.state
-					? setEmail({ ...email, error: true, errorHelperText: error.message })
-					: setEmail({ ...email, error: false, errorHelperText: '' });
+					? setEmail({ ...email, errorState: true, errorHelperText: error.message })
+					: setEmail({ ...email, errorState: false, errorHelperText: '' });
 				break;
 			case 'password':
 				error.state
-					? setPassword({ ...password, error: true, errorHelperText: error.message })
-					: setPassword({ ...password, error: false, errorHelperText: '' });
+					? setPassword({ ...password, errorState: true, errorHelperText: error.message })
+					: setPassword({ ...password, errorState: false, errorHelperText: '' });
 				break;
 			case 'confirmPassword':
 				error.state
-					? setConfirmPassword({ ...confirmPassword, error: true, errorHelperText: error.message })
-					: setConfirmPassword({ ...confirmPassword, error: false, errorHelperText: '' });
+					? setConfirmPassword({ ...confirmPassword, errorState: true, errorHelperText: error.message })
+					: setConfirmPassword({ ...confirmPassword, errorState: false, errorHelperText: '' });
 				break;
 			default:
 				break;
@@ -130,7 +130,7 @@ const Register = () => {
 					<Grid container spacing={2}>
 						<Grid item xs={12} sm={6}>
 							<TextField
-								error={firstName.error}
+								error={firstName.errorState}
 								helperText={firstName.errorHelperText}
 								autoComplete="fname"
 								variant="outlined"
@@ -146,7 +146,7 @@ const Register = () => {
 						</Grid>
 						<Grid item xs={12} sm={6}>
 							<TextField
-								error={lastName.error}
+								error={lastName.errorState}
 								helperText={lastName.errorHelperText}
 								variant="outlined"
 								required
@@ -161,7 +161,7 @@ const Register = () => {
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
-								error={email.error}
+								error={email.errorState}
 								helperText={email.errorHelperText}
 								variant="outlined"
 								required
@@ -176,7 +176,7 @@ const Register = () => {
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
-								error={password.error}
+								error={password.errorState}
 								helperText={password.errorHelperText}
 								variant="outlined"
 								required
@@ -192,7 +192,7 @@ const Register = () => {
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
-								error={confirmPassword.error}
+								error={confirmPassword.errorState}
 								helperText={confirmPassword.errorHelperText}
 								variant="outlined"
 								required
