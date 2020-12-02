@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { validateLogin } from '../helpers/validators';
 
 // Material UI Components
 import Container from '@material-ui/core/Container';
@@ -36,26 +37,48 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
 	const classes = useStyles();
 
-	const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+	const defaultFormState = { value: '', errorState: false, errorHelperText: '' };
+
+	const [email, setEmail] = useState(defaultFormState);
+	const [password, setPassword] = useState(defaultFormState);
 
 	const handleEmailChange = (event) => {
 		const newEmail = event.target.value;
-		setEmail(newEmail);
+		setEmail({ ...email, value: newEmail });
 	};
 
 	const handlePasswordChange = (event) => {
 		const newPassword = event.target.value;
-		setPassword(newPassword);
+		setPassword({ ...password, value: newPassword });
+	};
+
+	const validateEntry = (event) => {
+		const error = validateLogin(event);
+
+		switch (event.target.id) {
+			case 'email':
+				error.state
+					? setEmail({ ...email, errorState: true, helperText: error.message })
+					: setEmail({ ...email, errorState: false, helperText: '' });
+				break;
+			case 'password':
+				error.state
+					? setPassword({ ...password, errorState: true, helperText: error.message })
+					: setPassword({ ...password, errorState: false, helperText: '' });
+				break;
+
+			default:
+				break;
+		}
 	};
 
 	const handleLogin = (event) => {
-        event.preventDefault();
-        
-        // Send request to api/auth/login
+		event.preventDefault();
 
-        // Set username and accessToken in localStorage
-        localStorage.setItem('user', JSON.stringify({username: 'User', accessToken: 'asdfgh'}));
+		// Send request to api/auth/login
+
+		// Set username and accessToken in localStorage
+		localStorage.setItem('user', JSON.stringify({ username: 'User', accessToken: 'asdfgh' }));
 	};
 
 	return (
@@ -68,30 +91,35 @@ const Login = () => {
 					Login
 				</Typography>
 				<form className={classes.form} onSubmit={handleLogin}>
+					{console.log(email.errorState)}
 					<TextField
+						error={email.errorState}
+						helperText={email.helperText}
 						variant="outlined"
 						margin="normal"
 						required
 						fullWidth
 						id="email"
 						label="Email Address"
-						name="email"
 						autoComplete="email"
 						autoFocus
-						value={email}
+						value={email.value}
 						onChange={handleEmailChange}
+						onBlur={validateEntry}
 					/>
 					<TextField
+						error={password.errorState}
+						helperText={password.helperText}
 						variant="outlined"
 						margin="normal"
 						required
 						fullWidth
-						name="password"
 						label="Password"
 						id="password"
 						type="password"
-						value={password}
+						value={password.value}
 						onChange={handlePasswordChange}
+						onBlur={validateEntry}
 					/>
 					<Button type="submit" fullWidth variant="contained" color="secondary" className={classes.submit}>
 						Login

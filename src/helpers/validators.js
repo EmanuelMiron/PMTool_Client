@@ -55,3 +55,25 @@ export const validateRegister = (event, password) => {
 
     return error;
 }
+
+export const validateLogin = event => {
+    const id = event.target.id;
+    const value = event.target.value;
+
+    let error = {};
+
+    const checkIfValueIsEmpty = () => {
+        if (isEmpty(value)) {
+            error.message = 'Must not be empty'
+            error.state = true
+        }
+    }
+
+    if(id === 'email'){
+        checkIfValueIsEmpty();
+    } else if(id === 'password'){
+        checkIfValueIsEmpty();
+    }
+
+    return error;
+}
