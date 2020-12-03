@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { validateLogin } from '../helpers/validators';
+import { login } from '../services/auth.service';
 
 // Material UI Components
 import Container from '@material-ui/core/Container';
@@ -76,9 +77,10 @@ const Login = () => {
 		event.preventDefault();
 
 		// Send request to api/auth/login
+		login(email.value, password.value);
 
-		// Set username and accessToken in localStorage
-		localStorage.setItem('user', JSON.stringify({ username: 'User', accessToken: 'asdfgh' }));
+		setEmail(defaultFormState);
+		setPassword(defaultFormState);
 	};
 
 	return (
@@ -91,7 +93,6 @@ const Login = () => {
 					Login
 				</Typography>
 				<form className={classes.form} onSubmit={handleLogin}>
-					{console.log(email.errorState)}
 					<TextField
 						error={email.errorState}
 						helperText={email.helperText}

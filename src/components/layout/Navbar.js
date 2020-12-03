@@ -49,9 +49,9 @@ const Navbar = () => {
 				{isAuthenticated() ? (
 					<>
 						<Button className={classes.button} color="primary" variant="contained">
-							{currentUser.username}
+							{currentUser.firstName}
 						</Button>
-						<Button style={{ color: 'white' }} onClick={logout}>Logout</Button>
+						<Button className={classes.button} style={{ color: 'white' }} onClick={logout}>Logout</Button>
 					</>
 				) : (
 					<>
