@@ -17,3 +17,12 @@ export const login = (email, password) => {
     })
 }
 
+export const register = newUser => {
+    return axios.post(API_URL + "auth/register/", newUser)
+        .then( response => {
+            console.log(response.data.message);
+        })
+        .catch(err => {
+            console.error(err);
+        })
+}

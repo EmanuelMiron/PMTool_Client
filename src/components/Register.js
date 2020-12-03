@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { validateRegister } from '../helpers/validators';
+import { register } from '../services/auth.service';
 
 // Material UI Components
 import Container from '@material-ui/core/Container';
@@ -107,14 +108,22 @@ const Register = () => {
 	const handleRegister = (event) => {
 		event.preventDefault();
 
+		const newUser = {
+			firstName: firstName.value,
+			lastName: lastName.value,
+			email: email.value,
+			password: password.value
+		}
+
 		// Send request to api/auth/register
+		register(newUser);
 
 		// Reset form values
-		setFirstName('');
-		setLastName('');
-		setEmail('');
-		setPassword('');
-		setConfirmPassword('');
+		setFirstName(defaultFormState);
+		setLastName(defaultFormState);
+		setEmail(defaultFormState);
+		setPassword(defaultFormState);
+		setConfirmPassword(defaultFormState);
 	};
 
 	return (
