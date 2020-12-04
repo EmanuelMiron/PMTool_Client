@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { validateRegister } from '../helpers/validators';
 import { register } from '../services/auth.service';
+import Navbar from './layout/Navbar';
+import isAuthenticated from '../helpers/isAuthenticated';
+import { Redirect } from 'react-router-dom';
 
 // Material UI Components
 import Container from '@material-ui/core/Container';
@@ -11,6 +14,8 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 // Material UI Icons
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -33,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
 	submit: {
 		margin: theme.spacing(3, 0, 2),
 	},
+	alert: {
+		width: '100%',
+	},
 }));
 
 const Register = () => {
@@ -45,6 +53,8 @@ const Register = () => {
 	const [email, setEmail] = useState(defaultFormState);
 	const [password, setPassword] = useState(defaultFormState);
 	const [confirmPassword, setConfirmPassword] = useState(defaultFormState);
+	const [registerSuccessfully, setRegisterSuccessfully] = useState(false);
+	const [message, setMessage] = useState('');
 
 	const handleFirstNameChange = (event) => {
 		const newFirstName = event.target.value;
@@ -105,18 +115,24 @@ const Register = () => {
 		}
 	};
 
-	const handleRegister = (event) => {
+	const handleRegister = async (event) => {
 		event.preventDefault();
 
 		const newUser = {
 			firstName: firstName.value,
 			lastName: lastName.value,
 			email: email.value,
-			password: password.value
-		}
+			password: password.value,
+		};
 
 		// Send request to api/auth/register
-		register(newUser);
+		const data = await register(newUser);
+		if (data.status === 200) {
+			setRegisterSuccessfully(true);
+		} else if (data.status === 400) {
+			setRegisterSuccessfully(false);
+		}
+		setMessage(data.message);
 
 		// Reset form values
 		setFirstName(defaultFormState);
@@ -127,107 +143,126 @@ const Register = () => {
 	};
 
 	return (
-		<Container component="main" maxWidth="xs">
-			<div className={classes.paper}>
-				<Avatar className={classes.avatar}>
-					<LockOutlinedIcon />
-				</Avatar>
-				<Typography component="h1" variant="h4">
-					Register
-				</Typography>
-				<form className={classes.form} onSubmit={handleRegister}>
-					<Grid container spacing={2}>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								error={firstName.errorState}
-								helperText={firstName.errorHelperText}
-								autoComplete="fname"
-								variant="outlined"
-								required
+		<>
+			<Navbar />
+			{isAuthenticated() ? (
+				<Redirect to="/" />
+			) : (
+				<Container component="main" maxWidth="xs">
+					<div className={classes.paper}>
+						<Avatar className={classes.avatar}>
+							<LockOutlinedIcon />
+						</Avatar>
+						<Typography component="h1" variant="h4">
+							Register
+						</Typography>
+						{registerSuccessfully && (
+							<Alert className={classes.alert} severity="success">
+								<AlertTitle>Success</AlertTitle>
+								{message} <br /><strong>You can <Link href="/" color="secondary">Login</Link></strong>
+							</Alert>
+						)}
+						<form className={classes.form} onSubmit={handleRegister}>
+							<Grid container spacing={2}>
+								<Grid item xs={12} sm={6}>
+									<TextField
+										error={firstName.errorState}
+										helperText={firstName.errorHelperText}
+										autoComplete="fname"
+										variant="outlined"
+										required
+										fullWidth
+										id="firstName"
+										label="First Name"
+										autoFocus
+										value={firstName.value}
+										onChange={handleFirstNameChange}
+										onBlur={validateEntry}
+									/>
+								</Grid>
+								<Grid item xs={12} sm={6}>
+									<TextField
+										error={lastName.errorState}
+										helperText={lastName.errorHelperText}
+										variant="outlined"
+										required
+										fullWidth
+										id="lastName"
+										label="Last Name"
+										autoComplete="lname"
+										value={lastName.value}
+										onChange={handleLastNameChange}
+										onBlur={validateEntry}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<TextField
+										error={email.errorState}
+										helperText={email.errorHelperText}
+										variant="outlined"
+										required
+										fullWidth
+										id="email"
+										label="Email Address"
+										autoComplete="email"
+										value={email.value}
+										onChange={handleEmailChange}
+										onBlur={validateEntry}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<TextField
+										error={password.errorState}
+										helperText={password.errorHelperText}
+										variant="outlined"
+										required
+										fullWidth
+										label="Password"
+										type="password"
+										id="password"
+										autoComplete="current-password"
+										value={password.value}
+										onChange={handlePasswordChange}
+										onBlur={validateEntry}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<TextField
+										error={confirmPassword.errorState}
+										helperText={confirmPassword.errorHelperText}
+										variant="outlined"
+										required
+										fullWidth
+										label="Confirm Password"
+										type="password"
+										id="confirmPassword"
+										value={confirmPassword.value}
+										onChange={handleConfirmPasswordChange}
+										onBlur={validateEntry}
+									/>
+								</Grid>
+							</Grid>
+							<Button
+								type="submit"
 								fullWidth
-								id="firstName"
-								label="First Name"
-								autoFocus
-								value={firstName.value}
-								onChange={handleFirstNameChange}
-								onBlur={validateEntry}
-							/>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								error={lastName.errorState}
-								helperText={lastName.errorHelperText}
-								variant="outlined"
-								required
-								fullWidth
-								id="lastName"
-								label="Last Name"
-								autoComplete="lname"
-								value={lastName.value}
-								onChange={handleLastNameChange}
-								onBlur={validateEntry}
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								error={email.errorState}
-								helperText={email.errorHelperText}
-								variant="outlined"
-								required
-								fullWidth
-								id="email"
-								label="Email Address"
-								autoComplete="email"
-								value={email.value}
-								onChange={handleEmailChange}
-								onBlur={validateEntry}
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								error={password.errorState}
-								helperText={password.errorHelperText}
-								variant="outlined"
-								required
-								fullWidth
-								label="Password"
-								type="password"
-								id="password"
-								autoComplete="current-password"
-								value={password.value}
-								onChange={handlePasswordChange}
-								onBlur={validateEntry}
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<TextField
-								error={confirmPassword.errorState}
-								helperText={confirmPassword.errorHelperText}
-								variant="outlined"
-								required
-								fullWidth
-								label="Confirm Password"
-								type="password"
-								id="confirmPassword"
-								value={confirmPassword.value}
-								onChange={handleConfirmPasswordChange}
-								onBlur={validateEntry}
-							/>
-						</Grid>
-					</Grid>
-					<Button type="submit" fullWidth variant="contained" color="secondary" className={classes.submit}>
-						Register
-					</Button>
-					<Grid container justify="flex-end">
-						<Grid item>
-							<Link href="/login" variant="body2">
-								Already have an account? Login
-							</Link>
-						</Grid>
-					</Grid>
-				</form>
-			</div>
-		</Container>
+								variant="contained"
+								color="secondary"
+								className={classes.submit}
+							>
+								Register
+							</Button>
+							<Grid container justify="flex-end">
+								<Grid item>
+									<Link href="/login" variant="body2">
+										Already have an account? Login
+									</Link>
+								</Grid>
+							</Grid>
+						</form>
+					</div>
+				</Container>
+			)}
+		</>
 	);
 };
 
