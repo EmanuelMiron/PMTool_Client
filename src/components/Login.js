@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { validateLogin } from '../helpers/validators';
 import { login } from '../services/auth.service';
+import { Redirect} from 'react-router-dom';
+import isAuthenticated from '../helpers/isAuthenticated';
+import Navbar from './layout/Navbar';
 
 // Material UI Components
 import Container from '@material-ui/core/Container';
@@ -73,68 +76,79 @@ const Login = () => {
 		}
 	};
 
-	const handleLogin = (event) => {
+	const handleLogin = async (event) => {
 		event.preventDefault();
 
 		// Send request to api/auth/login
-		login(email.value, password.value);
+		await login(email.value, password.value);
 
 		setEmail(defaultFormState);
 		setPassword(defaultFormState);
 	};
 
 	return (
-		<Container component="main" maxWidth="xs">
-			<div className={classes.paper}>
-				<Avatar className={classes.avatar}>
-					<LockOutlinedIcon />
-				</Avatar>
-				<Typography component="h1" variant="h4">
-					Login
-				</Typography>
-				<form className={classes.form} onSubmit={handleLogin}>
-					<TextField
-						error={email.errorState}
-						helperText={email.helperText}
-						variant="outlined"
-						margin="normal"
-						required
-						fullWidth
-						id="email"
-						label="Email Address"
-						autoComplete="email"
-						autoFocus
-						value={email.value}
-						onChange={handleEmailChange}
-						onBlur={validateEntry}
-					/>
-					<TextField
-						error={password.errorState}
-						helperText={password.helperText}
-						variant="outlined"
-						margin="normal"
-						required
-						fullWidth
-						label="Password"
-						id="password"
-						type="password"
-						value={password.value}
-						onChange={handlePasswordChange}
-						onBlur={validateEntry}
-					/>
-					<Button type="submit" fullWidth variant="contained" color="secondary" className={classes.submit}>
+		<>
+			<Navbar />
+			{isAuthenticated() ? <Redirect to="/" /> : 
+			<Container component="main" maxWidth="xs">
+				<div className={classes.paper}>
+					<Avatar className={classes.avatar}>
+						<LockOutlinedIcon />
+					</Avatar>
+					<Typography component="h1" variant="h4">
 						Login
-					</Button>
-					<Grid container>
-						<Grid item xs>
-							<Link href="/register" variant="body2">
-								{"Don't have an account? Register"}
-							</Link>
+					</Typography>
+					<form className={classes.form} onSubmit={handleLogin}>
+						<TextField
+							error={email.errorState}
+							helperText={email.helperText}
+							variant="outlined"
+							margin="normal"
+							required
+							fullWidth
+							id="email"
+							label="Email Address"
+							autoComplete="email"
+							autoFocus
+							value={email.value}
+							onChange={handleEmailChange}
+							onBlur={validateEntry}
+						/>
+						<TextField
+							error={password.errorState}
+							helperText={password.helperText}
+							variant="outlined"
+							margin="normal"
+							required
+							fullWidth
+							label="Password"
+							id="password"
+							type="password"
+							value={password.value}
+							onChange={handlePasswordChange}
+							onBlur={validateEntry}
+						/>
+						<Button
+							type="submit"
+							fullWidth
+							variant="contained"
+							color="secondary"
+							className={classes.submit}
+						>
+							Login
+						</Button>
+						<Grid container>
+							<Grid item xs>
+								<Link href="/register" variant="body2">
+									{"Don't have an account? Register"}
+								</Link>
+							</Grid>
 						</Grid>
-					</Grid>
-				</form>
-			</div>
-		</Container>
+					</form>
+				</div>
+			</Container>
+}
+		</>
 	);
 };
 
