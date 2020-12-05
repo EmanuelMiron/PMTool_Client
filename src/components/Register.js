@@ -15,7 +15,6 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Alert from '@material-ui/lab/Alert';
-import AlertTitle from '@material-ui/lab/AlertTitle';
 
 // Material UI Icons
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -157,7 +156,6 @@ const Register = () => {
 						</Typography>
 						{registerSuccessfully && (
 							<Alert className={classes.alert} severity="success">
-								<AlertTitle>Success</AlertTitle>
 								{message} <br />
 								<strong>
 									You can{' '}
@@ -169,7 +167,6 @@ const Register = () => {
 						)}
 						{!registerSuccessfully && message && (
 							<Alert className={classes.alert} severity="error">
-								<AlertTitle>Error</AlertTitle>
 								<strong>{message}!</strong>
 							</Alert>
 						)}
