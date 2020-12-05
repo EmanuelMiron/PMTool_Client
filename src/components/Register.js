@@ -119,8 +119,8 @@ const Register = () => {
 		event.preventDefault();
 
 		const newUser = {
-			firstName: firstName.value,
-			lastName: lastName.value,
+			firstName: firstName.value.charAt(0).toUpperCase() + firstName.value.slice(1),
+			lastName: lastName.value.charAt(0).toUpperCase() + lastName.value.slice(1),
 			email: email.value,
 			password: password.value,
 		};
