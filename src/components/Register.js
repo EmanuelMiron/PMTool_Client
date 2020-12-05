@@ -129,17 +129,16 @@ const Register = () => {
 		const data = await register(newUser);
 		if (data.status === 200) {
 			setRegisterSuccessfully(true);
+			// Reset form values
+			setFirstName(defaultFormState);
+			setLastName(defaultFormState);
+			setEmail(defaultFormState);
+			setPassword(defaultFormState);
+			setConfirmPassword(defaultFormState);
 		} else if (data.status === 400) {
 			setRegisterSuccessfully(false);
 		}
 		setMessage(data.message);
-
-		// Reset form values
-		setFirstName(defaultFormState);
-		setLastName(defaultFormState);
-		setEmail(defaultFormState);
-		setPassword(defaultFormState);
-		setConfirmPassword(defaultFormState);
 	};
 
 	return (
@@ -159,7 +158,19 @@ const Register = () => {
 						{registerSuccessfully && (
 							<Alert className={classes.alert} severity="success">
 								<AlertTitle>Success</AlertTitle>
-								{message} <br /><strong>You can <Link href="/" color="secondary">Login</Link></strong>
+								{message} <br />
+								<strong>
+									You can{' '}
+									<Link href="/" color="secondary">
+										Login
+									</Link>
+								</strong>
+							</Alert>
+						)}
+						{!registerSuccessfully && message && (
+							<Alert className={classes.alert} severity="error">
+								<AlertTitle>Error</AlertTitle>
+								<strong>{message}!</strong>
 							</Alert>
 						)}
 						<form className={classes.form} onSubmit={handleRegister}>

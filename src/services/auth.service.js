@@ -10,10 +10,17 @@ export const login = (email, password) => {
             if (response.data.accessToken) {
                 localStorage.setItem("user", JSON.stringify(response.data));
             }
-            return response.data
+            return {
+                message: response.data.message,
+                status: response.status
+            }
         })
         .catch(err => {
             console.error(err);
+            return {
+                message: err.response.data.message,
+                status: err.response.status
+            }
         })
 }
 
@@ -28,8 +35,8 @@ export const register = newUser => {
         .catch(err => {
             console.error(err);
             return {
-                message: err.response.data,
-                status: err.repsponse.status
+                message: err.response.data.message,
+                status: err.response.status
             }
         })
 }
