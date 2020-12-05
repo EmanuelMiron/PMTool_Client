@@ -119,10 +119,13 @@ const Register = () => {
 
 		const newUser = {
 			firstName: firstName.value.charAt(0).toUpperCase() + firstName.value.slice(1),
-			lastName: lastName.value.charAt(0).toUpperCase() + lastName.value.slice(1),
 			email: email.value,
 			password: password.value,
 		};
+
+		if (lastName === '') {
+			newUser.lastName = lastName.value.charAt(0).toUpperCase() + lastName.value.slice(1);
+		}
 
 		// Send request to api/auth/register
 		const data = await register(newUser);
@@ -193,7 +196,6 @@ const Register = () => {
 										error={lastName.errorState}
 										helperText={lastName.errorHelperText}
 										variant="outlined"
-										required
 										fullWidth
 										id="lastName"
 										label="Last Name"

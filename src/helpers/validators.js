@@ -30,7 +30,7 @@ export const validateRegister = (event, password) => {
             break;
 
         case "lastName":
-            checkIfValueIsEmpty();
+            // Future validation
             break;
         case "email":
             if (!isEmail(value)) {
