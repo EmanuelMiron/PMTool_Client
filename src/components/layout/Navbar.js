@@ -1,48 +1,88 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import isAuthenticated from '../../helpers/isAuthenticated';
+import { drawerWidth } from './Dashboard';
+import clsx from 'clsx';
 
 // Material UI Components
 import AppBar from '@material-ui/core/AppBar';
 import ToolBar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 
-
+// Material UI Icons
+import MenuIcon from '@material-ui/icons/Menu'; 
 
 const useStyles = makeStyles((theme) => ({
 	title: {
 		flexGrow: 1,
 	},
 	button: {
-        marginRight: '0.5rem',
-        textTransform: 'none',
+		marginRight: '0.5rem',
+		textTransform: 'none',
+	},
+	menuButton: {
+		marginRight: 36,
+	},
+	hide: {
+		display: 'none',
+	},
+	appBar: {
+		zIndex: theme.zIndex.drawer + 1,
+		transition: theme.transitions.create(['width', 'margin'], {
+			easing: theme.transitions.easing.sharp,
+			duration: theme.transitions.duration.leavingScreen,
+		}),
+	},
+	appBarShift: {
+		marginLeft: drawerWidth,
+		width: `calc(100% - ${drawerWidth}px)`,
+		transition: theme.transitions.create(['width', 'margin'], {
+			easing: theme.transitions.easing.sharp,
+			duration: theme.transitions.duration.enteringScreen,
+		}),
 	},
 }));
 
-const Navbar = () => {
-    const classes = useStyles();
-    
-    const [currentUser, setCurrentUser] = useState("");
+const Navbar = (props) => {
+	const { open, openDrawer } = props;
+	const classes = useStyles();
 
-    useEffect(() => {
+	const [currentUser, setCurrentUser] = useState('');
 
-        const user = JSON.parse(localStorage.getItem('user'));
-        
-        if(user){
-            setCurrentUser(user);
-        }
-        
-    }, [])
+	useEffect(() => {
+		const user = JSON.parse(localStorage.getItem('user'));
 
-    const logout = () => {
-        localStorage.removeItem('user');
-        setCurrentUser("");
-    }
-    
+		if (user) {
+			setCurrentUser(user);
+		}
+	}, []);
+
+	const logout = () => {
+		localStorage.removeItem('user');
+		setCurrentUser('');
+	};
+
 	return (
-		<AppBar position="absolute">
+		<AppBar
+			position="fixed"
+			className={clsx(classes.appBar, {
+				[classes.appBarShift]: open,
+			})}
+		>
 			<ToolBar>
+				<IconButton
+					color="inherit"
+					aria-label="open drawer"
+					onClick={openDrawer}
+					edge="start"
+					className={clsx(classes.menuButton, {
+						[classes.hide]: open,
+					})}
+				>
+					<MenuIcon />
+				</IconButton>
 				<Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
 					PM Tool
 				</Typography>
@@ -51,7 +91,9 @@ const Navbar = () => {
 						<Button className={classes.button} color="primary" variant="contained">
 							{currentUser.firstName}
 						</Button>
-						<Button className={classes.button} style={{ color: 'white' }} onClick={logout}>Logout</Button>
+						<Button className={classes.button} style={{ color: 'white' }} onClick={logout}>
+							Logout
+						</Button>
 					</>
 				) : (
 					<>
