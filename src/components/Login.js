@@ -47,11 +47,13 @@ const Login = () => {
 
 	const defaultFormState = { value: '', errorState: false, errorHelperText: '' };
 
+	// ====== State ======
 	const [email, setEmail] = useState(defaultFormState);
 	const [password, setPassword] = useState(defaultFormState);
 	const [loginSuccessfully, setLoginSuccessfully] = useState(false);
 	const [message, setMessage] = useState('');
 
+	// ====== On Change Functions ======
 	const handleEmailChange = (event) => {
 		const newEmail = event.target.value;
 		setEmail({ ...email, value: newEmail });
@@ -62,6 +64,7 @@ const Login = () => {
 		setPassword({ ...password, value: newPassword });
 	};
 
+	// ====== Form Validation ======
 	const validateEntry = (event) => {
 		const error = validateLogin(event);
 
@@ -82,6 +85,7 @@ const Login = () => {
 		}
 	};
 
+	// ====== onSubmit form function ======
 	const handleLogin = async (event) => {
 		event.preventDefault();
 
